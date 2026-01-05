@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | VALLEY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Manrope', sans-serif; 
+            background-color: #f8fafc; /* Light Body */
+            color: #1e293b; /* Dark Text */
+            overflow-x: hidden; 
+        }
+
+        /* --- NAV BAR --- */
+        .sub-nav {
+            padding: 30px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+        /* Nav text remains white because it sits on the dark Hero Image */
+        .nav-logo { font-size: 24px; font-weight: 700; color: white; text-decoration: none; letter-spacing: -1px; }
+        .nav-back { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .nav-back:hover { color: white; }
+
+        /* --- HERO --- */
+        /* Kept dark overlay for text contrast, but fades into light theme at bottom */
+        .about-hero {
+            height: 60vh;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white; /* Text stays white on hero */
+        }
+        .hero-title h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 200; letter-spacing: -2px; margin-bottom: 20px; }
+        .hero-title p { color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* --- STORY SECTION --- */
+        .story-section { 
+            padding: 100px 10%; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 60px; 
+            align-items: center; 
+            background: #ffffff; /* White background */
+        }
+        .story-content h2 { 
+            font-size: 36px; 
+            font-weight: 300; 
+            margin-bottom: 30px; 
+            color: #0f172a; /* Dark Heading */
+        }
+        .story-content p { 
+            color: #475569; /* Slate text */
+            line-height: 1.8; 
+            margin-bottom: 20px; 
+            font-size: 16px; 
+        }
+        .story-img { 
+            width: 100%; 
+            border-radius: 20px; 
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); /* Soft shadow */
+        }
+
+        /* --- LEADERSHIP --- */
+        .team-section { 
+            padding: 100px 10%; 
+            background: #f8fafc; /* Light Grey background */
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* Section Background Tint/Glow */
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            /* Subtle green glow adapted for light theme */
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.05) 0%, rgba(5, 150, 105, 0) 70%);
+            filter: blur(50px);
+            z-index: 1; 
+            pointer-events: none;
+        }
+
+        .section-header { margin-bottom: 60px; text-align: center; position: relative; z-index: 2; }
+        .section-header h2 { font-size: 32px; font-weight: 300; color: #0f172a; }
+        
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; position: relative; z-index: 2; }
+        
+        /* Team Card Styles */
+        .team-card { 
+            background: #ffffff; /* White Card */
+            padding: 40px 30px;
+            border-radius: 24px; 
+            border: 1px solid rgba(0,0,0,0.05); 
+            text-align: center; 
+            transition: 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        /* Card Hover Glow */
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .team-card > * { position: relative; z-index: 1; }
+
+        .team-card:hover { 
+            transform: translateY(-10px); 
+            border-color: rgba(16, 185, 129, 0.3); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .team-card:hover::before { opacity: 1; }
+
+        .team-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 2px solid rgba(16, 185, 129, 0.3); padding: 3px; }
+        .team-name { font-size: 18px; margin-bottom: 5px; color: #0f172a; font-weight: 700; }
+        .team-role { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- FOOTER (Matches Home) --- */
+        .site-footer { 
+            background-color: #f1f5f9; 
+            border-top: 1px solid #e2e8f0; 
+            padding: 80px 10% 40px; 
+            font-size: 14px; 
+            margin-top: 50px; 
+            color: #475569;
+        }
+        .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+        .footer-brand h2 { font-size: 24px; font-weight: 300; color: #0f172a; margin-bottom: 20px; }
+        .footer-brand p { color: #64748b; line-height: 1.6; max-width: 300px; }
+        .footer-col h4 { color: #0f172a; font-weight: 600; margin-bottom: 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .footer-links a { color: #64748b; text-decoration: none; transition: 0.3s; }
+        .footer-links a:hover { color: #0f172a; padding-left: 5px; }
+        .footer-bottom { border-top: 1px solid #cbd5e1; padding-top: 30px; display: flex; justify-content: space-between; color: #94a3b8; }
+
+        @media(max-width: 768px) {
+            .story-section { grid-template-columns: 1fr; }
+            .footer-top { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sub-nav">
+        <a href="index.html" class="nav-logo">VALLEY</a>
+        <a href="index.html" class="nav-back">← Back to Home</a>
+    </nav>
+
+    <header class="about-hero">
+        <div class="hero-title">
+            <h1>We Architect Legacy.</h1>
+            <p>Valley was founded on a simple premise: Real estate isn't just about square footage. It's about potential, precision, and profit.</p>
+        </div>
+    </header>
+
+    <section class="story-section">
+        <div class="story-content">
+            <h2>The Valley Difference</h2>
+            <p>Founded in 2015, Valley emerged from a gap in the market between traditional brokerage and high-level strategic consulting. We realized that corporate clients didn't just need an office; they needed a workspace strategy that reduced attrition.</p>
+            <p>Investors didn't just need land; they needed yield forecasts backed by infrastructure data. Today, we manage over $400M in assets across India's major metros.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Office" class="story-img">
+    </section>
+
+    <section class="team-section">
+        <div class="section-header">
+            <h2>Leadership</h2>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="team-img" alt="CEO">
+                <h3 class="team-name">Arjun Mehta</h3>
+                <span class="team-role">Founder & CEO</span>
+            </div>
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="team-img" alt="COO">
+                <h3 class="team-name">Sarah Jenkins</h3>
+                <span class="team-role">Head of Advisory</span>
+            </div>
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/men/85.jpg" class="team-img" alt="CTO">
+                <h3 class="team-name">Vikram Singh</h3>
+                <span class="team-role">Head of Data</span>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h2>VALLEY</h2>
+                <p>Redefining real estate through data-driven strategy.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html" style="color:#0f172a; font-weight:700;">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Real Estate</h4>
+                <ul class="footer-links">
+                    <li><a href="properties.html">All Properties</a></li>
+                    <li><a href="index.html">Corporate</a></li>
+                    <li><a href="index.html">Residential</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Valley Real Estate.</span>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Properties | VALLEY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Manrope', sans-serif; 
+            background-color: #f8fafc; /* Light Body */
+            color: #1e293b; /* Dark Text */
+            overflow-x: hidden; 
+        }
+
+        /* --- NAV --- */
+        .sub-nav {
+            padding: 30px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9); /* Light Frosted Glass */
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-logo { font-size: 24px; font-weight: 700; color: #0f172a; text-decoration: none; letter-spacing: -1px; }
+        .nav-back { color: #64748b; text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .nav-back:hover { color: #0f172a; }
+
+        /* --- HEADER & FILTERS --- */
+        .prop-header { padding: 80px 10% 40px; text-align: center; }
+        .prop-header h1 { font-size: 48px; font-weight: 300; margin-bottom: 30px; color: #0f172a; }
+        
+        .filter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 25px;
+            background: #ffffff; /* White input */
+            border: 1px solid #cbd5e1; /* Slate border */
+            border-radius: 50px;
+            color: #1e293b;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .search-bar:focus { border-color: #0f172a; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .search-bar::placeholder { color: #94a3b8; }
+
+        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .f-btn {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        .f-btn:hover, .f-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+
+        /* --- PROPERTY GRID --- */
+        .listings-container { padding: 40px 10% 100px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .prop-card {
+            background: #ffffff; /* White Card */
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .prop-card:hover { transform: translateY(-5px); border-color: #cbd5e1; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+
+        .pc-img-box { height: 250px; overflow: hidden; position: relative; }
+        .pc-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .prop-card:hover .pc-img { transform: scale(1.05); }
+        
+        .pc-tag {
+            position: absolute;
+            top: 15px; left: 15px;
+            background: #ffffff; color: #0f172a;
+            font-size: 10px; font-weight: 700;
+            padding: 4px 10px; border-radius: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .pc-content { padding: 25px; }
+        .pc-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #0f172a; }
+        .pc-loc { font-size: 13px; color: #64748b; margin-bottom: 20px; display: block; }
+        
+        .pc-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+        }
+        .pc-price { font-size: 18px; font-weight: 700; color: #0f172a; }
+        .pc-yield { font-size: 12px; color: #059669; background: rgba(16, 185, 129, 0.1); padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+
+        /* --- FOOTER --- */
+        .site-footer { 
+            background-color: #f1f5f9; 
+            border-top: 1px solid #e2e8f0; 
+            padding: 80px 10% 40px; 
+            font-size: 14px; 
+            margin-top: auto; 
+            color: #475569;
+        }
+        .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+        .footer-brand h2 { font-size: 24px; font-weight: 300; color: #0f172a; margin-bottom: 20px; }
+        .footer-brand p { color: #64748b; line-height: 1.6; max-width: 300px; }
+        .footer-col h4 { color: #0f172a; font-weight: 600; margin-bottom: 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .footer-links a { color: #64748b; text-decoration: none; transition: 0.3s; }
+        .footer-links a:hover { color: #0f172a; padding-left: 5px; }
+        .footer-bottom { border-top: 1px solid #cbd5e1; padding-top: 30px; display: flex; justify-content: space-between; color: #94a3b8; }
+
+        @media(max-width: 768px) {
+            .prop-header h1 { font-size: 32px; }
+            .grid { grid-template-columns: 1fr; }
+            .footer-top { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sub-nav">
+        <a href="index.html" class="nav-logo">VALLEY</a>
+        <a href="index.html" class="nav-back">← Back to Home</a>
+    </nav>
+
+    <section class="prop-header">
+        <h1>Curated Portfolio</h1>
+        <div class="filter-container">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search by location, title, or price...">
+            <div class="filter-buttons">
+                <button class="f-btn active" onclick="filterData('all', this)">All</button>
+                <button class="f-btn" onclick="filterData('Corporate', this)">Corporate</button>
+                <button class="f-btn" onclick="filterData('Warehousing', this)">Warehousing</button>
+                <button class="f-btn" onclick="filterData('Residential', this)">Residential</button>
+                <button class="f-btn" onclick="filterData('Land', this)">Land & Ind.</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="listings-container">
+        <div id="grid-target" class="grid">
+            </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h2>VALLEY</h2>
+                <p>Redefining real estate through data-driven strategy.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Real Estate</h4>
+                <ul class="footer-links">
+                    <li><a href="properties.html" style="color:#0f172a; font-weight:700;">All Properties</a></li>
+                    <li><a href="#">Corporate</a></li>
+                    <li><a href="#">Residential</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Valley Real Estate.</span>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = "http://localhost:5000/api/properties";
+        let allData = [];
+        let currentCat = 'all';
+
+        // Fetch on Load
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch(API_URL);
+                allData = await res.json();
+                renderGrid(allData);
+            } catch (err) {
+                console.error("Error fetching properties:", err);
+            }
+        });
+
+        // Render Function
+        function renderGrid(data) {
+            const target = document.getElementById('grid-target');
+            if(data.length === 0) {
+                target.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.6; padding: 50px; color: #64748b;">No properties found.</p>`;
+                return;
+            }
+            target.innerHTML = data.map(p => `
+                <div class="prop-card">
+                    <div class="pc-img-box">
+                        <span class="pc-tag">${p.category}</span>
+                        <img src="${p.image}" class="pc-img" alt="${p.title}" referrerpolicy="no-referrer">
+                    </div>
+                    <div class="pc-content">
+                        <h3 class="pc-title">${p.title}</h3>
+                        <span class="pc-loc">${p.location}</span>
+                        <div class="pc-footer">
+                            <span class="pc-price">${p.price}</span>
+                            <span class="pc-yield">Yield: ${p.yield}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Logic (Category Button Click)
+        function filterData(cat, btn) {
+            currentCat = cat;
+            
+            // UI Update
+            document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            applyFilters();
+        }
+
+        // Search Logic (Typing)
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+        // Unified Filter Application
+        function applyFilters() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = allData.filter(p => {
+                const matchesCat = currentCat === 'all' || p.category.toLowerCase() === currentCat.toLowerCase();
+                const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
+                                      p.location.toLowerCase().includes(searchVal) ||
+                                      p.price.toLowerCase().includes(searchVal);
+                return matchesCat && matchesSearch;
+            });
+
+            renderGrid(filtered);
+        }
+    </script>
+</body>
+</html>
