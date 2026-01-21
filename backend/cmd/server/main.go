@@ -1,10 +1,12 @@
 package main
 
 import (
-	"valley/internal/routes"
+    "os"  // <--- This was missing!
+    "valley/internal/routes"
 )
+
 func main() {
-    // 1. Get the PORT from Render (they use "PORT", not "port")
+    // 1. Get the PORT from Render
     port := os.Getenv("PORT")
     if port == "" {
         port = "5000" // Default for local testing
@@ -14,6 +16,5 @@ func main() {
     r := routes.SetupRouter()
 
     // 3. Start the server
-    // IMPORTANT: We use the 'port' variable here
     r.Run(":" + port)
 }
