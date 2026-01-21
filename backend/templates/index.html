@@ -1,0 +1,410 @@
+{{ template "header" . }}
+
+<style>
+    /* --- INDEX SPECIFIC CSS --- */
+    
+    /* UTILS */
+    .section-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 2; }
+    .section-header span { color: #64748b; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 10px; }
+    .section-header h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 300; letter-spacing: -1px; background: linear-gradient(to right, #0f172a, #64748b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* HERO */
+    .hero { height: 100vh; width: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; overflow: hidden; }
+    .video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; }
+    video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); }
+    .hero-text { text-align: center; pointer-events: none; z-index: 2; padding: 0 20px; }
+    
+    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Responsive Font Sizing */
+    .hero-text h1 { 
+        font-size: clamp(48px, 12vw, 150px); /* Adjusted for mobile */
+        font-weight: 200; 
+        letter-spacing: -2px; 
+        line-height: 1.1; 
+        margin: 10px 0; 
+        opacity: 0; 
+        animation: heroFadeUp 1.5s var(--ease-out-expo) 0.2s forwards; 
+    }
+    .hero-text p { letter-spacing: 4px; text-transform: uppercase; font-size: 12px; opacity: 0; animation: heroFadeUp 1.5s var(--ease-out-expo) 0.5s forwards; }
+
+    /* NAV & LISTINGS */
+    .category-nav { 
+        position: absolute; 
+        bottom: 40px; 
+        display: flex; 
+        gap: 10px; 
+        background: rgba(255,255,255,0.1); 
+        padding: 15px 25px; 
+        border-radius: 30px; /* Softer radius for wrapping */
+        backdrop-filter: blur(20px); 
+        border: 1px solid rgba(255,255,255,0.2); 
+        z-index: 2; 
+        flex-wrap: wrap; /* Allows buttons to wrap on mobile */
+        justify-content: center; 
+        width: 90%; /* prevent overflow */
+        max-width: 800px;
+        opacity: 0; 
+        animation: heroFadeUp 1.5s var(--ease-out-expo) 0.8s forwards; 
+    }
+    .cat-btn { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 600; padding: 8px 12px; border-radius: 20px; transition: 0.4s var(--ease-out-expo); white-space: nowrap; }
+    .cat-btn:hover, .cat-btn.active { color: white; background: rgba(255,255,255,0.2); transform: scale(1.05); }
+    
+    .nav-wrapper { display: flex; justify-content: center; padding: 40px 0; background: #f8fafc; }
+    .main-nav-bar { 
+        display: flex; 
+        gap: 40px; 
+        background: #ffffff; 
+        padding: 20px 60px; 
+        border-radius: 100px; 
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+        border: 1px solid rgba(0,0,0,0.05); 
+        width: fit-content; 
+        transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s ease; 
+        flex-wrap: wrap; 
+        justify-content: center;
+    }
+    .main-nav-link { color: #64748b; text-decoration: none; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; font-weight: 700; transition: color 0.3s ease; position: relative; }
+    .main-nav-link:hover { color: #0f172a; }
+
+    /* WHY CHOOSE VALLEY */
+    .services-section { padding: 50px 10% 100px; background: #f8fafc; position: relative; }
+    .feature-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; grid-template-rows: 250px 250px; gap: 20px; max-width: 1200px; margin: 0 auto; }
+    .feature-card { border-radius: 30px; padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s var(--ease-out-expo); }
+    .feature-card:hover { transform: translateY(-10px) scale(1.01); box-shadow: 0 30px 60px rgba(0,0,0,0.25); }
+    
+    .card-visionary { grid-row: span 2; background: linear-gradient(to bottom, rgba(15, 22, 35, 0.2), rgba(15, 22, 35, 0.9)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80'); }
+    .card-data { background: linear-gradient(to bottom, rgba(15, 22, 35, 0.4), rgba(15, 22, 35, 0.95)), url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'); overflow: visible; }
+    .card-client { background: linear-gradient(to bottom, rgba(15, 22, 35, 0.4), rgba(15, 22, 35, 0.9)), url('https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=800&q=80'); }
+
+    .f-icon { width: 40px; height: 40px; margin-bottom: 20px; transition: transform 0.5s ease; }
+    .feature-card:hover .f-icon { transform: scale(1.1) rotate(5deg); }
+    .f-title { font-size: 24px; font-weight: 400; margin-bottom: 10px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .f-desc { font-size: 14px; color: #e2e8f0; line-height: 1.6; max-width: 90%; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+    
+    /* FEATURED GRID (Replacement for Film Strip) */
+    .listings-section { padding: 80px 10%; background: #f8fafc; }
+    
+    .featured-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Auto-responsive columns */
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .feat-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: 0.4s ease;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        height: 500px; /* Fixed height for uniformity */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .feat-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.15); }
+
+    .feat-img-box { height: 65%; overflow: hidden; position: relative; }
+    .feat-img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+    .feat-card:hover .feat-img { transform: scale(1.1); }
+
+    .feat-tag { position: absolute; top: 20px; left: 20px; background: #ffffff; color: #0f172a; font-size: 10px; font-weight: 700; padding: 6px 12px; border-radius: 30px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .feat-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .feat-title { font-size: 22px; font-weight: 500; color: #0f172a; margin-bottom: 5px; line-height: 1.3; }
+    .feat-loc { color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .feat-footer { border-top: 1px solid #f1f5f9; padding-top: 20px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .feat-price { font-size: 18px; font-weight: 700; color: #0f172a; }
+    .feat-link { color: #059669; font-size: 14px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
+    .feat-link:hover { gap: 10px; }
+
+    /* Centered View All Button */
+    .view-all-container { text-align: center; }
+    .btn-view-all { display: inline-block; padding: 15px 40px; background: transparent; border: 1px solid #0f172a; color: #0f172a; border-radius: 100px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; transition: 0.3s; text-decoration: none; }
+    .btn-view-all:hover { background: #0f172a; color: white; }
+
+    /* TESTIMONIALS */
+    .testimonial-section { padding: 80px 10%; background: #f1f5f9; overflow: hidden; }
+    .t-grid { display: flex; gap: 30px; overflow-x: auto; padding-bottom: 30px; scroll-snap-type: x mandatory; }
+    .t-grid::-webkit-scrollbar { height: 6px; } 
+    .t-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .t-card { min-width: 350px; background: #ffffff; padding: 40px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); scroll-snap-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.4s ease; }
+    .t-card:hover { transform: translateY(-5px); }
+    .t-content { font-size: 16px; line-height: 1.6; font-style: italic; color: #475569; margin-bottom: 20px; }
+    .t-user { display: flex; align-items: center; gap: 15px; }
+    .t-user img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+    .t-info h5 { font-size: 14px; font-weight: 600; color: #0f172a; }
+    .t-info span { font-size: 12px; color: #64748b; }
+
+    /* CONTACT */
+    .contact-section { padding: 100px 10%; background: linear-gradient(to top, #e2e8f0, #f8fafc); text-align: center; }
+    .contact-form { max-width: 500px; margin: 40px auto 0; display: flex; flex-direction: column; gap: 15px; }
+    .form-input { padding: 15px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; color: #1e293b; font-family: inherit; outline: none; transition: 0.3s ease; }
+    .form-input:focus { border-color: #0f172a; box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05); transform: scale(1.01); }
+    select.form-input { appearance: none; cursor: pointer; }
+    .form-btn { padding: 15px; background: #0f172a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: all 0.3s var(--ease-out-expo); }
+    .form-btn:hover { background: #334155; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2); }
+
+    /* --- MOBILE MEDIA QUERY FIXES --- */
+    @media (max-width: 768px) {
+        /* General Padding */
+        .services-section, .listings-section, .testimonial-section, .contact-section { padding: 50px 5%; }
+
+        /* Hero Adjustments */
+        .hero-text h1 { font-size: 48px; letter-spacing: -1px; } 
+        .hero-text p { letter-spacing: 2px; font-size: 10px; }
+
+        /* Category Nav - Stack/Wrap */
+        .category-nav { bottom: 20px; width: 95%; padding: 10px; gap: 5px; }
+        .cat-btn { font-size: 10px; padding: 6px 10px; }
+
+        /* Main Nav Bar - Wrap for Mobile */
+        .main-nav-bar { 
+            width: 90%; 
+            padding: 15px 20px; 
+            gap: 15px; 
+            border-radius: 20px;
+        }
+        .main-nav-link { font-size: 11px; letter-spacing: 1px; }
+
+        /* Grids to Single Column */
+        .feature-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+        .card-visionary { grid-row: auto; height: 300px; }
+        .feature-card { padding: 25px; height: 250px; }
+
+        .featured-grid { grid-template-columns: 1fr; }
+        .feat-card { height: auto; }
+        .feat-img-box { height: 250px; }
+
+        /* Testimonials */
+        .t-card { min-width: 280px; padding: 25px; }
+        .t-grid { gap: 15px; padding-bottom: 20px; }
+    }
+</style>
+
+<header class="hero">
+    <div class="video-container">
+        <video autoplay muted loop playsinline crossorigin="anonymous" id="v">
+            <source src="/images/valley-hero.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="hero-text">
+        <p>Consulting • Advisory • Brokerage</p>
+        <h1>VALLEY</h1>
+        <p style="margin-top: 15px; opacity: 0; animation-delay: 0.6s;">The Only Real Estate Consultants You'll Ever Need</p>
+    </div>
+
+    <nav class="category-nav">
+        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Residential'">Residential</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Corporate'">Corporate</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Land'">Land & Ind.</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Warehousing'">Warehousing</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?category=all'">All</button>
+    </nav>
+</header>
+
+<div class="nav-wrapper reveal">
+    <div class="main-nav-bar">
+        <a href="properties.html" class="main-nav-link" style="color:#0f172a;">Properties</a>
+        <a href="about.html" class="main-nav-link">About Us</a>
+        <a href="services.html" class="main-nav-link">Services</a>
+        <a href="contact.html" class="main-nav-link">Contact Us</a>
+    </div>
+</div>
+
+<section class="services-section">
+    <div class="section-header reveal">
+        <span>Our Expertise</span>
+        <h2>Why Choose Valley?</h2>
+    </div>
+    
+    <div class="feature-grid">
+        <div class="feature-card card-visionary reveal reveal-delay-1">
+            <div class="f-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            </div>
+            <h3 class="f-title">Visionary Advisory</h3>
+            <p class="f-desc">We don't just sell space; we engineer growth. Our advisory team leverages deep market intelligence to forecast infrastructure trends.</p>
+        </div>
+
+        <div class="feature-card card-data reveal reveal-delay-2">
+            <div class="f-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            </div>
+            <h3 class="f-title">Data Backed</h3>
+            <p class="f-desc">Proprietary analytics for accurate valuations and yield forecasts.</p>
+        </div>
+
+        <div class="feature-card card-client reveal reveal-delay-3">
+            <div class="f-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a2 2 0 0 0 2.83 0l5.66-5.66a2 2 0 0 0 0-2.83l-2.33-2.33a2 2 0 0 0-2.83 0L9.66 15a2 2 0 0 1-2.83 0l-1.22-1.23a2 2 0 1 0-2.83 2.83l.06.06a2 2 0 0 0 2.83 0L11 12V2h13v10"/><path d="M14 2v4"/><path d="M18 2v4"/></svg>
+            </div>
+            <h3 class="f-title">Tailored Search</h3>
+            <p class="f-desc">From multinational HQs to luxury family homes, we align property DNA with your specific needs.</p>
+        </div>
+    </div>
+</section>
+
+<div class="listings-section" id="property-section">
+    <div class="section-header reveal">
+        <span>Explore</span>
+        <h2>Curated Listings</h2>
+    </div>
+    
+    <div id="featured-grid" class="featured-grid reveal">
+        </div>
+
+    <div class="view-all-container reveal">
+        <a href="properties.html" class="btn-view-all">View Complete Portfolio</a>
+    </div>
+</div>
+
+<section class="testimonial-section">
+    <div class="section-header reveal">
+        <span>Trust</span>
+        <h2>Client Stories</h2>
+    </div>
+    <div class="t-grid reveal" id="testimonial-grid">
+        </div>
+</section>
+
+<section class="contact-section">
+    <div class="section-header reveal">
+        <span>Contact Us</span>
+        <h2>Start Your Journey</h2>
+    </div>
+    
+    <form class="contact-form reveal" onsubmit="sendHomeEmail(event)">
+        <input type="text" id="home-name" class="form-input" placeholder="Your Name" required>
+        <input type="email" id="home-email" class="form-input" placeholder="Email Address" required>
+        <input type="tel" id="home-phone" class="form-input" placeholder="Phone Number">
+        <select id="home-interest" class="form-input" required>
+            <option value="" disabled selected hidden>Select Service Interest</option>
+            <option>Corporate Real Estate</option>
+            <option>Warehousing</option>
+            <option>Residential Investment</option>
+            <option>Strategic Advisory</option>
+        </select>
+        <input type="hidden" id="home-message" value="Inquiry from Home Page">
+        
+        <button type="submit" class="form-btn" id="home-btn">Submit Enquiry</button>
+    </form>
+</section>
+
+<script>
+    const API_BASE = "/api"; // Relative path for production
+    let allProperties = [];
+
+    // --- FETCH PROPERTIES ---
+    // Fetches all, but grid render function cuts it to top 3
+    async function fetchProperties() {
+        try {
+            const res = await fetch(`${API_BASE}/properties`);
+            allProperties = await res.json();
+            renderFeatured();
+        } catch(err) { console.error("Prop error", err); }
+    }
+
+    // UPDATED RENDER FUNCTION FOR STATIC GRID
+    function renderFeatured() {
+        const container = document.getElementById('featured-grid');
+        
+        // Take only the first 3 items for the highlight grid
+        const featuredItems = allProperties.slice(0, 3);
+
+        if (!featuredItems || featuredItems.length === 0) {
+            container.innerHTML = `<p style="text-align: center; width: 100%; opacity: 0.5;">No listings found.</p>`;
+            return;
+        }
+
+        container.innerHTML = featuredItems.map(p => `
+            <div class="feat-card">
+                <div class="feat-img-box">
+                    <span class="feat-tag">${p.category}</span>
+                    <img src="${p.image}" class="feat-img" alt="${p.title}" referrerpolicy="no-referrer">
+                </div>
+                <div class="feat-content">
+                    <div>
+                        <h3 class="feat-title">${p.title}</h3>
+                        <span class="feat-loc">${p.location}</span>
+                    </div>
+                    <div class="feat-footer">
+                        <span class="feat-price">${p.price}</span>
+                        <a href="properties.html" class="feat-link">Details →</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // --- FETCH TESTIMONIALS ---
+    async function fetchTestimonials() {
+        try {
+            const res = await fetch(`${API_BASE}/testimonials`);
+            const data = await res.json();
+            document.getElementById('testimonial-grid').innerHTML = data.map(t => `
+                <div class="t-card">
+                    <div class="t-content">"${t.content}"</div>
+                    <div class="t-user">
+                        <img src="${t.avatar}" alt="${t.name}">
+                        <div class="t-info">
+                            <h5>${t.name}</h5>
+                            <span>${t.role}, ${t.company}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch(err) { console.error("Testimonial error", err); }
+    }
+
+    // --- SEND EMAIL FUNCTION (FOR HOME PAGE FORM) ---
+    async function sendHomeEmail(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('home-btn');
+        const originalText = btn.innerText;
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+
+        const payload = {
+            name: document.getElementById('home-name').value,
+            email: document.getElementById('home-email').value,
+            phone: document.getElementById('home-phone').value,
+            interest: document.getElementById('home-interest').value,
+            message: "Inquiry from Home Page Quick Form" 
+        };
+
+        try {
+            const res = await fetch(`${API_BASE}/contact`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                alert("Thanks! We'll be in touch.");
+                e.target.reset();
+            } else {
+                alert("Error sending. Check server logs.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Connection failed.");
+        }
+
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+
+    // --- INITIALIZE ON LOAD ---
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchProperties();
+        fetchTestimonials();
+    });
+</script>
+
+{{ template "footer" . }}

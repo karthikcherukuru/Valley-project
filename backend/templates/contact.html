@@ -1,0 +1,146 @@
+{{ template "header" . }}
+
+<style>
+    /* CONTACT STYLES */
+    .sub-nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: transparent; position: absolute; width: 100%; top: 0; z-index: 100; }
+    .nav-logo { font-size: 24px; font-weight: 700; color: #0f172a; text-decoration: none; letter-spacing: -1px; }
+    .nav-back { color: #000000; text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+    .nav-back:hover { color: #0f172a; }
+
+    .page-background-wrapper { position: relative; min-height: 100vh; overflow: hidden; padding-bottom: 50px; padding-top: 80px; }
+    .page-background-wrapper::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(161, 161, 161, 0.7), #0e0e0e), url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; filter: blur(8px); transform: scale(1.1); z-index: -1; }
+
+    .contact-hero { padding: 80px 5% 40px; text-align: center; }
+    .contact-hero h1 { font-size: clamp(32px, 6vw, 64px); font-weight: 300; color: #0f172a; letter-spacing: -2px; margin-bottom: 20px; }
+    .contact-hero p { color: #000000; max-width: 500px; margin: 0 auto; line-height: 1.6; font-size: 18px; }
+
+    .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 20px 5% 100px; max-width: 1200px; margin: 0 auto; align-items: start; }
+    .info-col { display: flex; flex-direction: column; gap: 20px; }
+    .info-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.05); padding: 25px; border-radius: 16px; display: flex; gap: 20px; align-items: flex-start; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .info-card:hover { border-color: #4ade80; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    .ic-icon { width: 45px; height: 45px; background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #166534; flex-shrink: 0; }
+    .ic-content h4 { font-size: 17px; font-weight: 600; margin-bottom: 5px; color: #0f172a; }
+    .ic-content p { color: #64748b; font-size: 14px; line-height: 1.6; }
+
+    .main-form { background: #ffffff; border: 1px solid rgba(0,0,0,0.05); padding: 40px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 11px; color: #64748b; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+    .c-input, .c-textarea, .c-select { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; color: #0f172a; padding: 14px; border-radius: 8px; font-family: inherit; outline: none; transition: 0.3s; }
+    .c-input:focus, .c-textarea:focus, .c-select:focus { border-color: #4ade80; background: #ffffff; box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1); }
+    .submit-btn { width: 100%; padding: 16px; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    .submit-btn:hover { background: #1e293b; transform: translateY(-1px); }
+
+    @media (max-width: 900px) { .contact-wrapper { grid-template-columns: 1fr; } }
+</style>
+
+<nav class="sub-nav">
+    <a href="/" class="nav-logo">VALLEY</a>
+    <a href="/" class="nav-back">← Home</a>
+</nav>
+
+<div class="page-background-wrapper">
+    <header class="contact-hero">
+        <h1>Start Your Journey</h1>
+        <p>Connect with our expert team for corporate headquarters or luxury residences.</p>
+    </header>
+
+    <section class="contact-wrapper">
+        <div class="info-col">
+            <div class="info-card">
+                <div class="ic-icon">📍</div>
+                <div class="ic-content">
+                    <h4>Headquarters</h4>
+                    <p>Valley Tower, 14th Floor,<br>Financial District, Gachibowli,<br>Hyderabad, 500032</p>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="ic-icon">📞</div>
+                <div class="ic-content">
+                    <h4>Get in Touch</h4>
+                    <p>+91 8800 123 456</p>
+                    <p><a href="mailto:advisory@valley.com" style="color: inherit;">advisory@valley.com</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <form class="main-form" onsubmit="sendEmail(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="contact-name" class="c-input" placeholder="Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" id="contact-phone" class="c-input" placeholder="e.g. +91 99999 99999">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="contact-email" class="c-input" placeholder="name@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Interest</label>
+                    <select id="contact-interest" class="c-select" required>
+                        <option value="" disabled selected hidden>Select Service Interest</option>
+                        <option>Strategic Advisory</option>
+                        <option>Corporate Real Estate</option>
+                        <option>Residential Buying</option>
+                        <option>Warehousing</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea id="contact-message" class="c-textarea" placeholder="How can we help you?" rows="4" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn">Send Enquiry</button>
+            </form>
+
+            <script>
+                async function sendEmail(e) {
+                    e.preventDefault();
+                    
+                    const btn = document.getElementById('submit-btn');
+                    const originalText = btn.innerText;
+                    btn.innerText = "Sending...";
+                    btn.disabled = true;
+
+                    const payload = {
+                        name: document.getElementById('contact-name').value,
+                        email: document.getElementById('contact-email').value,
+                        // FIXED: Now correctly targeting the ID 'contact-phone'
+                        phone: document.getElementById('contact-phone').value,
+                        interest: document.getElementById('contact-interest').value,
+                        message: document.getElementById('contact-message').value
+                    };
+
+                    try {
+                        const res = await fetch('http://localhost:5000/api/contact', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (res.ok) {
+                            alert("Message sent! We will contact you shortly.");
+                            e.target.reset();
+                        } else {
+                            alert("Error sending message. Please try again.");
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("Server error.");
+                    }
+
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            </script>
+        </div>
+    </section>
+</div>
+
+{{ template "footer" . }}

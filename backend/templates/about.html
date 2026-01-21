@@ -1,0 +1,80 @@
+{{ template "header" . }}
+
+<style>
+    /* ABOUT PAGE STYLES */
+    .sub-nav { padding: 30px 10%; display: flex; justify-content: space-between; align-items: center; position: absolute; top: 0; left: 0; width: 100%; z-index: 10; }
+    .nav-logo { font-size: 24px; font-weight: 700; color: white; text-decoration: none; letter-spacing: -1px; }
+    .nav-back { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+    .nav-back:hover { color: white; }
+
+    /* HERO */
+    .about-hero { height: 60vh; background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; color: white; }
+    .hero-title h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 200; letter-spacing: -2px; margin-bottom: 20px; }
+    .hero-title p { color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+    /* STORY */
+    .story-section { padding: 100px 10%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; background: #ffffff; }
+    .story-content h2 { font-size: 36px; font-weight: 300; margin-bottom: 30px; color: #0f172a; }
+    .story-content p { color: #475569; line-height: 1.8; margin-bottom: 20px; font-size: 16px; }
+    .story-img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+    /* TEAM */
+    .team-section { padding: 100px 10%; background: #f8fafc; position: relative; overflow: hidden; }
+    .team-section::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; background: radial-gradient(circle, rgba(5, 150, 105, 0.05) 0%, rgba(5, 150, 105, 0) 70%); filter: blur(50px); z-index: 1; pointer-events: none; }
+    .section-header { margin-bottom: 60px; text-align: center; position: relative; z-index: 2; }
+    .section-header h2 { font-size: 32px; font-weight: 300; color: #0f172a; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; position: relative; z-index: 2; }
+    .team-card { background: #ffffff; padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05); text-align: center; transition: 0.4s ease; position: relative; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .team-card:hover { transform: translateY(-10px); border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .team-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 2px solid rgba(16, 185, 129, 0.3); padding: 3px; }
+    .team-name { font-size: 18px; margin-bottom: 5px; color: #0f172a; font-weight: 700; }
+    .team-role { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+    
+    @media(max-width: 768px) { .story-section { grid-template-columns: 1fr; } }
+</style>
+
+<nav class="sub-nav">
+    <a href="/" class="nav-logo">VALLEY</a>
+    <a href="/" class="nav-back">← Back to Home</a>
+</nav>
+
+<header class="about-hero">
+    <div class="hero-title">
+        <h1>We Architect Legacy.</h1>
+        <p>Valley was founded on a simple premise: Real estate isn't just about square footage. It's about potential, precision, and profit.</p>
+    </div>
+</header>
+
+<section class="story-section">
+    <div class="story-content">
+        <h2>The Valley Difference</h2>
+        <p>Founded in 2015, Valley emerged from a gap in the market between traditional brokerage and high-level strategic consulting. We realized that corporate clients didn't just need an office; they needed a workspace strategy that reduced attrition.</p>
+        <p>Investors didn't just need land; they needed yield forecasts backed by infrastructure data. Today, we manage over $400M in assets across India's major metros.</p>
+    </div>
+    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Office" class="story-img">
+</section>
+
+<section class="team-section">
+    <div class="section-header">
+        <h2>Leadership</h2>
+    </div>
+    <div class="team-grid">
+        <div class="team-card">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="team-img" alt="CEO">
+            <h3 class="team-name">Arjun Mehta</h3>
+            <span class="team-role">Founder & CEO</span>
+        </div>
+        <div class="team-card">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="team-img" alt="COO">
+            <h3 class="team-name">Sarah Jenkins</h3>
+            <span class="team-role">Head of Advisory</span>
+        </div>
+        <div class="team-card">
+            <img src="https://randomuser.me/api/portraits/men/85.jpg" class="team-img" alt="CTO">
+            <h3 class="team-name">Vikram Singh</h3>
+            <span class="team-role">Head of Data</span>
+        </div>
+    </div>
+</section>
+
+{{ template "footer" . }}

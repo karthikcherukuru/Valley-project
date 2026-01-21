@@ -1,0 +1,49 @@
+/* --- GLOBAL STYLES (backend/assets/css/style.css) --- */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: 'Manrope', sans-serif; 
+    background-color: #f8fafc; 
+    color: #1e293b; 
+    overflow-x: hidden; /* Important for mobile */
+    width: 100%;        /* Ensures content doesn't spill out */
+    scroll-behavior: smooth; 
+}
+
+/* --- ANIMATION UTILS --- */
+:root { --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1); }
+
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1.2s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
+}
+
+.reveal.active { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* --- SHARED FOOTER STYLES --- */
+.site-footer {
+    background-color: #f1f5f9; border-top: 1px solid #e2e8f0;
+    padding: 80px 10% 40px; font-size: 14px; color: #475569;
+}
+.footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+.footer-brand h2 { font-size: 24px; font-weight: 300; letter-spacing: -1px; margin-bottom: 20px; color: #0f172a; }
+.footer-brand p { color: #64748b; line-height: 1.6; max-width: 300px; }
+.footer-col h4 { color: #0f172a; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { color: #64748b; text-decoration: none; transition: 0.3s; position: relative; left: 0; }
+.footer-links a:hover { color: #0f172a; left: 5px; }
+.footer-bottom { border-top: 1px solid #cbd5e1; padding-top: 30px; display: flex; justify-content: space-between; color: #94a3b8; }
+.social-links { display: flex; gap: 15px; margin-top: 20px; }
+.social-icon { width: 20px; height: 20px; stroke: #64748b; transition: 0.3s; transform-origin: center; }
+.social-icon:hover { stroke: #0f172a; transform: rotate(10deg) scale(1.1); }
+
+@media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) {
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+}
