@@ -54,6 +54,13 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 
+	// Add this line along with your other GET routes
+r.GET("/privacy", func(c *gin.Context) {
+    c.HTML(200, "privacy.html", gin.H{
+        "title": "Privacy Policy | Valley",
+    })
+})
+
 	// 4. API Routes
 	api := r.Group("/api")
 	{
