@@ -60,6 +60,13 @@ func SetupRouter() *gin.Engine {
             "title": "Privacy Policy | Valley",
         })
     })
+	
+	// Terms of Service Page
+    r.GET("/terms.html", func(c *gin.Context) {
+        c.HTML(http.StatusOK, "terms.html", gin.H{
+            "title": "Terms of Service | Valley",
+        })
+    })
 
     // 4. API Routes
     api := r.Group("/api")
