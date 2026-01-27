@@ -33,7 +33,19 @@
     /* CHANGED: Reduced min-width to 280px to fit small mobile screens */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
 
-    .prop-card { background: #ffffff; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); transition: 0.3s ease; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    /* UPDATE: Added display block and text decoration removal for the anchor tag */
+    .prop-card { 
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: #ffffff; 
+        border-radius: 20px; 
+        overflow: hidden; 
+        border: 1px solid rgba(0,0,0,0.05); 
+        transition: 0.3s ease; 
+        cursor: pointer; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
+    }
     .prop-card:hover { transform: translateY(-5px); border-color: #cbd5e1; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
 
     .pc-img-box { height: 250px; overflow: hidden; position: relative; }
@@ -92,7 +104,7 @@
 </section>
 
 <script>
-    const API_URL = "/api/properties"; // Changed to relative path for production safety
+    const API_URL = "/api/properties"; 
     let allData = [];
     let currentCat = 'all';
 
@@ -129,8 +141,10 @@
             target.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.6; padding: 50px; color: #64748b;">No properties found for this category.</p>`;
             return;
         }
+        
+        // UPDATE: Wrapped the card in an anchor tag <a> linking to /property/{id}
         target.innerHTML = data.map(p => `
-            <div class="prop-card">
+            <a href="/property/${p.id || 1}" class="prop-card">
                 <div class="pc-img-box">
                     <span class="pc-tag">${p.category}</span>
                     <img src="${p.image}" class="pc-img" alt="${p.title}" referrerpolicy="no-referrer">
@@ -143,7 +157,7 @@
                         <span class="pc-yield">Yield: ${p.yield}</span>
                     </div>
                 </div>
-            </div>
+            </a>
         `).join('');
     }
 

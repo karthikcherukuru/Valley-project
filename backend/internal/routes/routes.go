@@ -47,21 +47,25 @@ func SetupRouter() *gin.Engine {
         })
     })
 
-    // Properties Page
+    // Properties Page (The list of all properties)
     r.GET("/properties.html", func(c *gin.Context) {
         c.HTML(http.StatusOK, "properties.html", gin.H{
             "title": "Valley | Properties",
         })
     })
 
-    // Privacy Policy Page (Updated to use .html)
+    // --- NEW: Single Property Details Page ---
+    // This handles links like /property/1, /property/2, etc.
+    r.GET("/property/:id", handlers.GetPropertyDetails)
+
+    // Privacy Policy Page
     r.GET("/privacy.html", func(c *gin.Context) {
         c.HTML(http.StatusOK, "privacy.html", gin.H{
             "title": "Privacy Policy | Valley",
         })
     })
-	
-	// Terms of Service Page
+    
+    // Terms of Service Page
     r.GET("/terms.html", func(c *gin.Context) {
         c.HTML(http.StatusOK, "terms.html", gin.H{
             "title": "Terms of Service | Valley",

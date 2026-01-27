@@ -1,0 +1,136 @@
+{{ template "header" . }}
+
+<style>
+    .prop-container {
+        padding: 120px 5% 80px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Left Column: Content */
+    .prop-header { margin-bottom: 20px; }
+    .prop-title { font-size: 2.5rem; color: #0f172a; margin-bottom: 10px; }
+    .prop-location { color: #64748b; font-size: 1.1rem; text-decoration: none; border-bottom: 1px dashed #64748b; }
+    .prop-location:hover { color: #2563eb; border-color: #2563eb; }
+    
+    .prop-price { font-size: 2rem; color: #16a34a; font-weight: bold; margin: 15px 0; }
+
+    /* Image Gallery */
+    .gallery-main {
+        width: 100%;
+        height: 500px;
+        background: #f1f5f9;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Key Details Grid */
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        background: #f8fafc;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
+    .detail-item span { display: block; font-size: 0.9rem; color: #64748b; }
+    .detail-item strong { display: block; font-size: 1.2rem; color: #0f172a; }
+
+    .prop-desc { line-height: 1.8; color: #334155; margin-bottom: 40px; }
+
+    /* Right Column: Sticky Enquiry Form */
+    .enquire-card {
+        background: white;
+        padding: 30px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        position: sticky;
+        top: 100px; /* Makes it stick when scrolling */
+        height: fit-content;
+    }
+    .enquire-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: #0f172a;
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 10px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .enquire-btn:hover { background: #334155; }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 900px) {
+        .prop-container { grid-template-columns: 1fr; padding-top: 100px; }
+        .gallery-main { height: 300px; }
+        .enquire-card { position: relative; top: 0; }
+    }
+</style>
+
+<div class="prop-container">
+    <div class="prop-content">
+        <div class="prop-header">
+            <h1 class="prop-title">{{ .Prop.Name }}</h1>
+            <a href="{{ .Prop.LocationURL }}" target="_blank" class="prop-location">
+                📍 {{ .Prop.Location }} (View on Map)
+            </a>
+            <div class="prop-price">{{ .Prop.Price }}</div>
+        </div>
+
+        <div class="gallery-main">
+            <img src="{{ index .Prop.Images 0 }}" alt="Property Image">
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span>Configuration</span>
+                <strong>{{ .Prop.Config }}</strong>
+            </div>
+            <div class="detail-item">
+                <span>Floor Info</span>
+                <strong>{{ .Prop.Floor }}</strong>
+            </div>
+            <div class="detail-item">
+                <span>Status</span>
+                <strong>{{ .Prop.Status }}</strong>
+            </div>
+            <div class="detail-item">
+                <span>Possession</span>
+                <strong>{{ .Prop.Possession }}</strong>
+            </div>
+        </div>
+
+        <h3>Property Overview</h3>
+        <p class="prop-desc">{{ .Prop.Description }}</p>
+    </div>
+
+    <div class="prop-sidebar">
+        <div class="enquire-card">
+            <h3 style="margin-bottom: 15px;">Interested?</h3>
+            <p style="color: #64748b; margin-bottom: 20px;">Fill out the form below to book a site visit or get more details.</p>
+            
+            <form action="/api/contact" method="POST">
+                <input type="text" name="name" placeholder="Your Name" required style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <input type="email" name="email" placeholder="Email Address" required style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <input type="tel" name="phone" placeholder="Phone Number" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <input type="hidden" name="property_id" value="{{ .Prop.ID }}">
+                
+                <button type="submit" class="enquire-btn">Enquire Now</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{ template "footer" . }}
