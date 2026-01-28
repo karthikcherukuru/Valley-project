@@ -296,11 +296,10 @@
 </section>
 
 <script>
-    const API_BASE = "/api"; // Relative path for production
+    const API_BASE = "/api"; 
     let allProperties = [];
 
     // --- FETCH PROPERTIES ---
-    // Fetches all, but grid render function cuts it to top 3
     async function fetchProperties() {
         try {
             const res = await fetch(`${API_BASE}/properties`);
@@ -309,11 +308,9 @@
         } catch(err) { console.error("Prop error", err); }
     }
 
-    // UPDATED RENDER FUNCTION FOR STATIC GRID
+    // UPDATED RENDER FUNCTION
     function renderFeatured() {
         const container = document.getElementById('featured-grid');
-        
-        // Take only the first 3 items for the highlight grid
         const featuredItems = allProperties.slice(0, 3);
 
         if (!featuredItems || featuredItems.length === 0) {
@@ -321,6 +318,8 @@
             return;
         }
 
+        // --- THE FIX IS HERE ---
+        // Changed the href from "properties.html" to "/property/${p.id}"
         container.innerHTML = featuredItems.map(p => `
             <div class="feat-card">
                 <div class="feat-img-box">
@@ -334,7 +333,7 @@
                     </div>
                     <div class="feat-footer">
                         <span class="feat-price">${p.price}</span>
-                        <a href="properties.html" class="feat-link">Details →</a>
+                        <a href="/property/${p.id || 1}" class="feat-link">Details →</a>
                     </div>
                 </div>
             </div>
@@ -361,7 +360,7 @@
         } catch(err) { console.error("Testimonial error", err); }
     }
 
-    // --- SEND EMAIL FUNCTION (FOR HOME PAGE FORM) ---
+    // --- SEND EMAIL FUNCTION ---
     async function sendHomeEmail(e) {
         e.preventDefault();
         
@@ -400,7 +399,6 @@
         btn.disabled = false;
     }
 
-    // --- INITIALIZE ON LOAD ---
     window.addEventListener('DOMContentLoaded', () => {
         fetchProperties();
         fetchTestimonials();

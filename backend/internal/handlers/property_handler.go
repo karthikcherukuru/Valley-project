@@ -4,76 +4,112 @@ import (
 	"net/http"
 	"strings"
 	"valley/internal/data"
+	"valley/internal/models" // <--- Added this import so we can use models.Property
 
 	"github.com/gin-gonic/gin"
 )
 
+// GetProperties returns the list of all properties as JSON
 func GetProperties(c *gin.Context) {
 	c.JSON(http.StatusOK, data.Properties)
 }
 
+// GetPropertiesByCategory filters properties by category and returns JSON
 func GetPropertiesByCategory(c *gin.Context) {
 	category := strings.ToLower(c.Param("category"))
 
 	var filtered []interface{}
 	for _, p := range data.Properties {
-		if strings.ToLower(p.Category) == category {
+		// Handle "land" special case or just general matching
+		if strings.ToLower(p.Category) == category || (category == "land" && strings.Contains(strings.ToLower(p.Category), "land")) {
+			filtered = append(filtered, p)
+		} else if category == "all" {
 			filtered = append(filtered, p)
 		}
 	}
+	// If the loop finished but filtered is empty (and cat isn't 'all'), return empty list
+	if filtered == nil {
+		filtered = []interface{}{}
+	}
+	
 	c.JSON(http.StatusOK, filtered)
 }
 
+// GetTestimonials returns the list of testimonials
 func GetTestimonials(c *gin.Context) {
 	c.JSON(http.StatusOK, data.Testimonials)
 }
-// GetPropertyDetails handles requests for a single property page
+
+// GetPropertyDetails handles requests for a single property page (HTML)
 func GetPropertyDetails(c *gin.Context) {
-    id := c.Param("id")
+	id := c.Param("id")
+	var selectedProp models.Property
+	found := false
 
-    // MOCK DATA: Simulating a database response
-    // In the future, you will replace this with: property := database.GetProperty(id)
-    var property gin.H
-    
-    if id == "1" {
-        property = gin.H{
-            "ID": "1",
-            "Name": "Luxury Valley Villa",
-            "Price": "₹ 4.5 Cr",
-            "Location": "Sarjapur Road, Bangalore",
-            "LocationURL": "https://www.google.com/maps", 
-            "Config": "4 BHK Duplex",
-            "Floor": "G + 1 (Top Floor)",
-            "Status": "Ready to Move",
-            "Possession": "Immediate",
-            "Description": "Experience the pinnacle of luxury living in this sprawling 4 BHK duplex. Featuring Italian marble flooring, a private garden, and floor-to-ceiling windows offering panoramic views of the valley. Amenities include a clubhouse, infinity pool, and 24/7 security.",
-            "Images": []string{
-                "/images/valley-hero.mp4", // Placeholder using your existing video
-                "https://images.unsplash.com/photo-1600596542815-6000255ade87?auto=format&fit=crop&w=800&q=80",
-                "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
-            },
-        }
-    } else {
-        // Fallback data for any other ID so the page always works for testing
-        property = gin.H{
-            "ID": id,
-            "Name": "Modern High-Rise Apartment",
-            "Price": "₹ 1.2 Cr",
-            "Location": "Whitefield, Bangalore",
-            "LocationURL": "https://www.google.com/maps",
-            "Config": "3 BHK",
-            "Floor": "14th Floor",
-            "Status": "Under Construction",
-            "Possession": "Dec 2027",
-            "Description": "A smart home for the modern professional. Located in the heart of the tech hub, this apartment offers smart-home automation, a rooftop zen garden, and coworking spaces within the building.",
-            "Images": []string{
-                 "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-            },
-        }
-    }
+	// 1. Search for the property in our data list
+	for _, p := range data.Properties {
+		if p.ID == id {
+			selectedProp = p
+			found = true
+			break
+		}
+	}
 
-    c.HTML(http.StatusOK, "property-details.html", gin.H{
-        "title": property["Name"],
-        "Prop": property,
-    })
+	// Fallback: If ID not found (or if data is empty), use the first property to prevent crash
+	if !found && len(data.Properties) > 0 {
+		selectedProp = data.Properties[0]
+	}
+
+	// 2. Define the "Extra Details" that aren't in your main list (Description, Config, etc.)
+	// We map them here dynamically based on the ID.
+	
+	details := gin.H{
+		"ID":          selectedProp.ID,
+		"Name":        selectedProp.Title,
+		"Price":       selectedProp.Price,
+		"Location":    selectedProp.Location,
+		"LocationURL": "https://www.google.com/maps/search/?api=1&query=" + selectedProp.Location, // Dynamic Map Link
+		"Category":    selectedProp.Category,
+		// Default values for any property
+		"Config":      "Standard Configuration",
+		"Floor":       "Ground Floor",
+		"Status":      "Ready to Move",
+		"Possession":  "Immediate",
+		"Description": "A premium property opportunity located in " + selectedProp.Location + ", offering excellent returns and strategic value.",
+		"Images":      []string{selectedProp.Image},
+	}
+
+	// 3. Custom details for the 4 specific Demo IDs
+	switch selectedProp.ID {
+	case "1": // Tech Park (Corporate)
+		details["Config"] = "20,000 sqft Floor Plate"
+		details["Floor"] = "Floors 1–15"
+		details["Status"] = "Leased (Yield Generative)"
+		details["Description"] = "Grade A office space in the heart of Hitech City. LEED Gold certified building with 100% power backup, high-speed elevators, and centralized air conditioning. Ideal for MNC headquarters."
+		// Adding a second image for the slideshow
+		details["Images"] = []string{selectedProp.Image, "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80"}
+	
+	case "2": // Logistics (Warehousing)
+		details["Config"] = "1.5 Lakh sqft Warehouse"
+		details["Status"] = "Operational"
+		details["Floor"] = "Ground Level (12m Height)"
+		details["Description"] = "State-of-the-art warehousing facility with 12m clear height, FM2 flooring, and 10 docking bays. Located on the main highway corridor for easy logistics access."
+	
+	case "3": // Penthouse (Residential)
+		details["Config"] = "5 BHK Sky Villa"
+		details["Floor"] = "24th (Top Floor)"
+		details["Description"] = "Ultra-luxury penthouse with a private pool and 360-degree views of the Bangalore skyline. Features Italian marble flooring, home automation, and dedicated elevator access."
+		details["Images"] = []string{selectedProp.Image, "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80"}
+
+	case "4": // SEZ Land (Land)
+		details["Config"] = "SEZ Notified Land"
+		details["Status"] = "Clear Title"
+		details["Floor"] = "N/A"
+		details["Description"] = "A massive 400-acre contiguous land parcel suitable for setting up a large-scale IT SEZ or manufacturing unit. Fully compliant with government regulations and ready for development."
+	}
+
+	c.HTML(http.StatusOK, "property-details.html", gin.H{
+		"title": selectedProp.Title,
+		"Prop":  details,
+	})
 }
