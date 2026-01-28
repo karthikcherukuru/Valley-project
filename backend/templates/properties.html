@@ -179,8 +179,14 @@
             const pCat = p.category.toLowerCase();
             const cCat = currentCat.toLowerCase();
             
-            const matchesCat = currentCat === 'all' || pCat === cCat || (cCat === 'land' && pCat.includes('land'));
-            
+// Smart Commercial Logic
+const isCommercial = cCat === 'commercial';
+const isLand = cCat === 'land';
+
+const matchesCat = currentCat === 'all' || 
+                   pCat === cCat || 
+                   (isLand && pCat.includes('land')) || 
+                   (isCommercial && (pCat.includes('corporate') || pCat.includes('warehousing') || pCat.includes('land')));            
             const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
                                   p.location.toLowerCase().includes(searchVal) ||
                                   p.price.toLowerCase().includes(searchVal);

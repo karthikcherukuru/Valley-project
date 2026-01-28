@@ -149,6 +149,102 @@
     .form-btn { padding: 15px; background: #0f172a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: all 0.3s var(--ease-out-expo); }
     .form-btn:hover { background: #334155; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2); }
 
+    /* --- STICKY BUTTON STYLES --- */
+    .sticky-btn-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        animation: heroFadeUp 1s ease 2s forwards; /* Delays appearance until after hero load */
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .sticky-btn {
+        background: #0f172a;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .sticky-btn:hover {
+        background: #2563eb;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
+    }
+
+    /* POPUP MODAL */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(5px);
+        z-index: 2000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    
+    .modal-card {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        transform: scale(0.9);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.active .modal-card { transform: scale(1); }
+
+    .modal-title { font-size: 24px; margin-bottom: 30px; color: #0f172a; font-weight: 600; }
+    
+    .modal-options { display: flex; flex-direction: column; gap: 15px; }
+    .modal-btn {
+        padding: 15px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        background: white;
+        color: #0f172a;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s ease;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .modal-btn:hover {
+        background: #f1f5f9;
+        border-color: #0f172a;
+    }
+    .modal-btn span:last-child { opacity: 0.5; }
+
+    .modal-close {
+        margin-top: 20px;
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        font-size: 12px;
+        text-decoration: underline;
+    }
+
     /* --- MOBILE MEDIA QUERY FIXES --- */
     @media (max-width: 768px) {
         /* General Padding */
@@ -183,6 +279,10 @@
         /* Testimonials */
         .t-card { min-width: 280px; padding: 25px; }
         .t-grid { gap: 15px; padding-bottom: 20px; }
+
+        /* Sticky Button on Mobile */
+        .sticky-btn { padding: 12px 20px; font-size: 12px; }
+        .sticky-btn-container { bottom: 20px; right: 20px; }
     }
 </style>
 
@@ -295,6 +395,27 @@
     </form>
 </section>
 
+<div class="sticky-btn-container">
+    <button class="sticky-btn" onclick="openModal()">
+        Explore Now <span>→</span>
+    </button>
+</div>
+
+<div class="modal-overlay" id="exploreModal" onclick="closeModal(event)">
+    <div class="modal-card">
+        <h3 class="modal-title">What are you looking for?</h3>
+        <div class="modal-options">
+            <button class="modal-btn" onclick="window.location.href='/properties.html?category=Residential'">
+                Residential Properties <span>→</span>
+            </button>
+            <button class="modal-btn" onclick="window.location.href='/properties.html?category=Commercial'">
+                Commercial & Industrial <span>→</span>
+            </button>
+        </div>
+        <button class="modal-close" onclick="closeModal(event)">Close</button>
+    </div>
+</div>
+
 <script>
     const API_BASE = "/api"; 
     let allProperties = [];
@@ -318,8 +439,6 @@
             return;
         }
 
-        // --- THE FIX IS HERE ---
-        // Changed the href from "properties.html" to "/property/${p.id}"
         container.innerHTML = featuredItems.map(p => `
             <div class="feat-card">
                 <div class="feat-img-box">
@@ -397,6 +516,17 @@
 
         btn.innerText = originalText;
         btn.disabled = false;
+    }
+
+    // --- STICKY MODAL FUNCTIONS ---
+    function openModal() {
+        document.getElementById('exploreModal').classList.add('active');
+    }
+
+    function closeModal(e) {
+        if(e.target === document.getElementById('exploreModal') || e.target.classList.contains('modal-close')) {
+            document.getElementById('exploreModal').classList.remove('active');
+        }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
