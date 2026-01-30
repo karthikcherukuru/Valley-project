@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"html/template"
 	"net/http"
 	"valley/internal/handlers"
 
@@ -9,6 +10,15 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+
+	// --- FIX: Register Custom Template Functions ---
+	// We must define "safeHTML" BEFORE loading templates so the server knows what it is.
+	// This allows us to use bold text and line breaks in property descriptions.
+	r.SetFuncMap(template.FuncMap{
+		"safeHTML": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	})
 
 	// 1. Load HTML Templates
 	r.LoadHTMLGlob("templates/*.html")
