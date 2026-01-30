@@ -119,11 +119,14 @@
             const categoryFromUrl = urlParams.get('category');
 
             if (categoryFromUrl) {
+                // Try to find a button that matches
                 const btn = Array.from(document.querySelectorAll('.f-btn')).find(b => 
                     b.innerText.toLowerCase().includes(categoryFromUrl.toLowerCase()) || 
                     (categoryFromUrl === 'Land' && b.innerText.includes('Land'))
                 );
-                if (btn) filterData(categoryFromUrl, btn);
+                
+                // FORCE the filter to run, even if no button is found (btn will be undefined for "Commercial", which is fine)
+                filterData(categoryFromUrl, btn);
             } else {
                 renderGrid(allData);
             }
@@ -164,7 +167,9 @@
     // Filter Logic
     function filterData(cat, btn) {
         currentCat = cat;
+        // Remove active class from all buttons
         document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        // Only add active class if a button actually exists
         if(btn) btn.classList.add('active');
         applyFilters();
     }
@@ -179,14 +184,15 @@
             const pCat = p.category.toLowerCase();
             const cCat = currentCat.toLowerCase();
             
-// Smart Commercial Logic
-const isCommercial = cCat === 'commercial';
-const isLand = cCat === 'land';
+            // Smart Commercial Logic
+            const isCommercial = cCat === 'commercial';
+            const isLand = cCat === 'land';
 
-const matchesCat = currentCat === 'all' || 
-                   pCat === cCat || 
-                   (isLand && pCat.includes('land')) || 
-                   (isCommercial && (pCat.includes('corporate') || pCat.includes('warehousing') || pCat.includes('land')));            
+            const matchesCat = currentCat === 'all' || 
+                            pCat === cCat || 
+                            (isLand && pCat.includes('land')) || 
+                            (isCommercial && (pCat.includes('corporate') || pCat.includes('warehousing') || pCat.includes('land')));            
+            
             const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
                                   p.location.toLowerCase().includes(searchVal) ||
                                   p.price.toLowerCase().includes(searchVal);

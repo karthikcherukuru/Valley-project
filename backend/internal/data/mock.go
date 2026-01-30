@@ -2,12 +2,48 @@ package data
 
 import "valley/internal/models"
 
-// Only 4 Properties for the Demo
+// Updated Property List (4 Real Properties)
 var Properties = []models.Property{
-    {ID: "1", Title: "Tech Park One", Category: "Corporate", Price: "₹85/sqft", Location: "Hitech City, Hyderabad", Yield: "Rental", Image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80"},
-    {ID: "2", Title: "Logistics Hub North", Category: "Warehousing", Price: "₹45 Cr", Location: "Bhiwandi, Mumbai", Yield: "8.5%", Image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80"},
-    {ID: "3", Title: "Skyline Penthouse", Category: "Residential", Price: "₹5.5 Cr", Location: "Whitefield, Bangalore", Yield: "Sale", Image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"},
-    {ID: "4", Title: "400 Acre SEZ Land", Category: "Land", Price: "₹150 Cr", Location: "Noida, NCR", Yield: "Sale", Image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80"},
+    // Property 1: Apartment
+    {
+        ID:       "1",
+        Title:    "Purva Silversky",
+        Category: "Residential",
+        Price:    "Contact for Price",
+        Location: "Hebbagodi, Electronic City",
+        Yield:    "Sale",
+        Image:    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+    },
+    // Property 2: Apartment
+    {
+        ID:       "2",
+        Title:    "Sobha Whitefield",
+        Category: "Residential",
+        Price:    "₹39.1 Lakhs Onwards",
+        Location: "Whitefield, Bangalore",
+        Yield:    "Investment",
+        Image:    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+    },
+    // Property 3: Villa (New)
+    {
+        ID:       "3",
+        Title:    "Sobha Lifestyle Legacy",
+        Category: "Villa",
+        Price:    "₹6.5 Cr Onwards",
+        Location: "Devanahalli, North Bangalore",
+        Yield:    "Luxury",
+        Image:    "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80", // Luxury Villa Image
+    },
+    // Property 4: Villa (New)
+    {
+        ID:       "4",
+        Title:    "Chaithanya Oak Ville",
+        Category: "Villa",
+        Price:    "Contact for Price",
+        Location: "Whitefield, Bangalore",
+        Yield:    "Luxury",
+        Image:    "https://images.unsplash.com/photo-1600596542815-6000255ade87?auto=format&fit=crop&w=800&q=80", // Modern Villa Image
+    },
 }
 
 var Testimonials = []models.Testimonial{
