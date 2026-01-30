@@ -299,11 +299,10 @@
     </div>
 
     <nav class="category-nav">
-        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Residential'">Residential</button>
-        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Corporate'">Corporate</button>
-        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Land'">Land & Ind.</button>
-        <button class="cat-btn" onclick="window.location.href='/properties.html?category=Warehousing'">Warehousing</button>
-        <button class="cat-btn" onclick="window.location.href='/properties.html?category=all'">All</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?group=residential'">Residential</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?group=commercial'">Commercial</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?group=commercial'">Land & Ind.</button>
+        <button class="cat-btn" onclick="window.location.href='/properties.html?group=all'">All</button>
     </nav>
 </header>
 
@@ -405,13 +404,13 @@
     <div class="modal-card">
         <h3 class="modal-title">What are you looking for?</h3>
         <div class="modal-options">
-            <button class="modal-btn" onclick="window.location.href='/properties.html?category=Residential'">
+            <button class="modal-btn" onclick="window.location.href='/properties.html?group=residential'">
                 Residential Properties <span>→</span>
             </button>
-            <button class="modal-btn" onclick="window.location.href='/properties.html?category=Commercial'">
+            <button class="modal-btn" onclick="window.location.href='/properties.html?group=commercial'">
                 Commercial & Industrial <span>→</span>
-            </button>
-        </div>
+        </button>
+    </div>
         <button class="modal-close" onclick="closeModal(event)">Close</button>
     </div>
 </div>
