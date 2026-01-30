@@ -7,7 +7,7 @@ var Properties = []models.Property{
     {
         ID: "1", Title: "Purva Silversky", Category: "Apartment", // Changed from Residential
         Price: "Contact for Price", Location: "Hebbagodi, Electronic City", Yield: "Sale", 
-        Image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+        Image: "/images/pu-1.webp",
     },
     {
         ID: "2", Title: "Sobha Whitefield", Category: "Apartment", // Changed from Residential

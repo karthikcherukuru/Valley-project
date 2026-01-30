@@ -85,12 +85,13 @@ func GetPropertyDetails(c *gin.Context) {
         details["Status"] = "Newly Launched"
         details["Possession"] = "2028"
         details["Floor"] = "G + 20 Floors"
-        details["Description"] = `
-            <strong>About The Project:</strong> Purva Silversky represents a new benchmark in premium residential living in South East Bangalore. Located in Hebbagodi near Electronic City Phase 2, it features over 70% open green spaces and low-density planning.<br><br>
-            <strong>Why Choose This?</strong> Intelligent layouts maximize ventilation and light. Amenities include a grand clubhouse, swimming pool, multiple sports courts, and a party hall.<br><br>
-            <strong>Connectivity:</strong> Minutes from Electronic City Phase 2 and Biocon Campus. Excellent access to Hosur Main Road and the upcoming Metro Phase 2 expansion.
-        `
-        details["Images"] = []string{selectedProp.Image, "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=800&q=80"}
+        details["Description"] = `Purva Silversky Electronic City Apartments represent a new benchmark in premium residential living in South East Bangalore. Developed by the reputed Puravankara Group, this newly launched project is located in Hebbagodi near Electronic City Phase 2, one of Bengaluru’s fastest-growing employment and infrastructure corridors.
+                                With a thoughtful blend of luxury, space, greenery, and connectivity, Purva Silversky Electronic City Apartments are designed for homebuyers who seek long-term value, lifestyle comfort, and strong appreciation potential.`
+        details["Images"] = []string{
+            "/images/pu-1.webp",
+            "/images/pu-2.webp",
+            "/images/pu-3.webp",
+        }
 
     case "2": // Sobha Whitefield
         details["Config"] = "2 & 3 BHK Luxury"
